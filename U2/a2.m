@@ -24,6 +24,7 @@ else
     disp('Code ist nicht prefixfrei');
 end
 
+% Check Code Prefix (Kraftsche Ungleichung)
 function pf = check_binary_prefix(codes)
     pf = 0;
     N = length(codes);
