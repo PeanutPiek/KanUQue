@@ -8,7 +8,7 @@ c_ = 0:255;
 [H0, H1, LM] = hufftr(c_, p_image('Laboruebung 1/s2201.ppm'), 'huff_s2201.dict');
 % Read Code Dictionary
 [dict1, d1_min, d1_max] = read_dict('huff_s2201.dict');
-if check_binary_prefix(table2array(dict1(:,2))) <= 1
+if check_binary_prefix(dict1(:,2)) <= 1
     disp('Code ist prefixfrei');
 else
     disp('Code ist nicht prefixfrei');
@@ -18,22 +18,13 @@ end
 [H0_, H1_, LM_] = hufftr(c_, p_image('Laboruebung 1/s2202.ppm'), 'huff_s2202.dict');
 % Read Code Dictionary
 [dict2, d2_min, d2_max] = read_dict('huff_s2202.dict');
-if check_binary_prefix(table2array(dict2(:,2))) <= 1
-    disp('Code ist prefixfrei');
-else
-    disp('Code ist nicht prefixfrei');
-end
 
 function pf = check_binary_prefix(codes)
     pf = 0;
-    N = length(codes);
-    l_ = zeros(N, 1);
-    for i = 1:N
-        n = strlength(codes(i));
-        l_(n) = l_(n) + 1;
-    end
-    for i = 1:N
-        pf = pf + l_(i) * 2^-i; 
+    N 
+    l_ = zeros(
+    for i = 1:length(codes)
+        
     end
 end
 
