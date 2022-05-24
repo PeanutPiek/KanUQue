@@ -11,6 +11,9 @@ gray = rgb2gray(img);
 [h,w] = size(gray);
 m = w*h;
 
+figure('Name', 'Raw');
+imshow(img);
+
 % Schritt 1
 x = reshape(gray, [m 1]);
 % Read List of Codes
@@ -18,11 +21,6 @@ c_ = cell(height(dict), 1);
 for i = 1:height(dict)
     c_(i) = dict{i, 2};
 end
-
-% img = imread('Laboruebung 1/s2201.ppm');
-% m = size(img, 1) * size(img, 2);
-% gray = rgb2gray(img);
-% x = reshape(gray, m, 1);
 
 % Schritt 2
 huff=cell(height(dict), 1);
@@ -51,3 +49,6 @@ assert(sum(x)==sum(y));
 
 komp = l / (m*8);
 
+imgy = reshape (y, [h w]);
+figure('Name', 'Decoded');
+imshow(imgy);
