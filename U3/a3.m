@@ -1,0 +1,4 @@
+clear;
+home;
+close all;
+
