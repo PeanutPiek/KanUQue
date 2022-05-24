@@ -1,8 +1,10 @@
 function[H0, H1, LM] = hufftr(c_, p_, codefile)
     assert(uint8(sum(p_))==1)
     assert(length(c_)==length(p_))
+
     M = size(p_,2);
     p0_ = p_;
+    c0_ = c_;
 
     H0 = log2(M);
     H1 = 0;
@@ -19,6 +21,10 @@ function[H0, H1, LM] = hufftr(c_, p_, codefile)
     % Build Data Map
     data_ = [string(c_sorted); p_sorted];
     
+    map = cell(M, 1);
+    for i = 1:M
+        map(i) = num2cell(c_(i));
+    end
     delimiter = ',';
     codes = ones(M, M-1) * -1;
     
@@ -29,18 +35,18 @@ function[H0, H1, LM] = hufftr(c_, p_, codefile)
         if contains(w, delimiter)
             sw = split(w, delimiter);
             for wi = 1:size(sw,1)
-                codes(str2num(sw(wi))+1, i) = 1;
+                codes(find(sw(wi), map), i) = 1;
             end
         else
-            codes(str2num(w)+1, i) = 1;
+            codes(find(w, map), i) = 1;
         end
         if contains(wn, delimiter)
             swn = split(wn, delimiter);
             for wni = 1:size(swn, 1)
-                codes(str2num(swn(wni))+1, i) = 0;
+                codes(find(swn(wni), map), i) = 0;
             end
         else
-            codes(str2num(wn)+1, i) = 0;
+            codes(find(wn, map), i) = 0;
         end
         
         data_(1, i) = strcat(data_(1,i), strcat(delimiter, data_(1,i+1)));
@@ -53,20 +59,33 @@ function[H0, H1, LM] = hufftr(c_, p_, codefile)
         [p_sorted, sortIdx] = sort(p_, 'descend');
         c_sorted = c_(sortIdx);
         data_ = [string(c_sorted); double(p_sorted)];
-    
-    end    
+    end 
+
+    assert(uint8(sum(double(data_(2, 1)))));
 
     LM = 0;    
     fid = fopen(codefile, 'w');
     for i = 1:M
+        sym = string(c0_(i));
         code = "";
-        for j = 1:M-1
+        for j = M-1:-1:1
             if codes(i, j) ~= -1
                 code = strcat(string(codes(i,j)), code);
             end
         end
         LM = LM + (p0_(i) * strlength(code));
-        fprintf(fid, "%d;%s\n", i-1, code);
+        fprintf(fid, "%s;%s\n", sym, code);
     end
     fclose(fid);
+end
+
+
+function [index] = find(v, map)
+    index = -1;
+    for i = 1:length(map)
+        t = string(map(i,1));
+        if strcmpi(v, t)
+            index = i;
+        end
+    end
 end
