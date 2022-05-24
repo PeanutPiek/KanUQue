@@ -1,15 +1,22 @@
-dict = readtable('huff_s2201.dict', 'Format', '%s%s', 'FileType', 'Text', 'delimiter', ';');
+clear
+home
+close all
 
-c = cell(height(dict), 1);
-for i = 1:height(dict)
-    c(i) = dict{i, 2};
-end
+% Load Dictionary 
+dict = readtable('huff_s2202.dict', 'Format', '%s%s', 'FileType', 'Text', 'delimiter', ';');
+% Load Image
+img = imread('Laboruebung 1/s2201.ppm');
+% Convert to Gray
+gray = rgb2gray(img);
+[h,w] = size(gray);
+m = w*h;
 
 % Schritt 1
-m=1000;                  
-x=zeros(1, m);
-for i=1:m
-  x(i)= uint8(rand * 255);
+x = reshape(gray, [m 1]);
+% Read List of Codes
+c_ = cell(height(dict), 1);
+for i = 1:height(dict)
+    c_(i) = dict{i, 2};
 end
 
 % img = imread('Laboruebung 1/s2201.ppm');
@@ -18,22 +25,22 @@ end
 % x = reshape(gray, m, 1);
 
 % Schritt 2
-huff=cell(length(c), 1);
+huff=cell(height(dict), 1);
 for i=1:m
     v = x(i);
-    huff(i) = cellstr(c{v+1});
+    huff(i) = cellstr(dict{v+1, 2});
 end
 
 l = 0;
 
 % Schritt 3
 j=1;
-y=zeros(1, length(c));
+y=zeros(1, height(dict));
 for i = 1:length(huff)
     l = l + strlength(huff(i));
     for j = 1:height(dict)
-        if strcmp(c(j), huff(i))
-            y(i) = j-1;
+        if strcmp(dict{j, 2}, huff(i))
+            y(i) = str2double(dict{j, 1});
             break
         end
     end
@@ -43,5 +50,4 @@ assert(length(x)==length(y));
 assert(sum(x)==sum(y));
 
 komp = l / (m*8);
-
 
