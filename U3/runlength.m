@@ -1,4 +1,4 @@
-function R=runlength(M)
+function R = runlength(M)
     [h,l]=size(M);
 
     for i=1:h
