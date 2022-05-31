@@ -1,4 +1,4 @@
-function R_ = rlencode(M, filename)
+function R_ = rlencode(M, filename, format)
     [h, w] = size(M);
     N = w*h;
     raw = reshape(M, [N 1]);
@@ -27,10 +27,10 @@ function R_ = rlencode(M, filename)
         ei = find(R_(:,i) == 0, 1);
         if isempty(ei)
             % No Index found, write dataset with ending zero
-            fwrite(fid, [R_(i, :) 0], 'integer*2');
+            fwrite(fid, [R_(i, :) 0], format);
         else
             % Write dataset upto ending zero
-            fwrite(fid, R_(1:ei(1), i), 'integer*2');
+            fwrite(fid, R_(1:ei(1), i), format);
         end
     end
     fclose(fid);
