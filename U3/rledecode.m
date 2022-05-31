@@ -1,30 +1,24 @@
-function M = rledecode(M, I)
+function M = rledecode(M, I, S)
     Bn = length(I);
-    B = [];
+    B = ones(S, 8) * -1;
     
-    e = 1;
+    e = 0;
     for i = 1:Bn
-        d_ = M(e:e+I(i)-1);
-        % Cut '0'
-        d_ = d_(1:length(d_)-1);
-        e = e+I(i);
+        d_ = M(e+1:I(i)-1);
+        e = I(i);
         
         N = length(d_);
         K = sum(d_);
         
         f = 0;
         b_ = ones(K, 1) * -1;
-        % Per Bit
+        % Per Code Symbol
         for n = 1:N
-            % Per Code Value
-            fj = f;
-            for j = 1:d_(n)
-                fj = f + j;
-                b_(fj, 1) = 0^(mod(n, 2));
-            end
-            f = fj;
+            % Write number of Bits
+            b_(f+1:f+d_(n)) = 0^(mod(n, 2));
+            f = f + d_(n);
         end
         
-        B(:,i) = b_;
+        B(1:K,i) = b_;
     end
 end

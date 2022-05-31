@@ -24,5 +24,6 @@ fclose(fid);
 
 ind = find(dat == 0);
 
-imgn = rledecode(dat, ind);
+imgn = rledecode(dat, ind, size(img, 1)*size(img, 2));
 
+assert(isequal(dat, imgn));
