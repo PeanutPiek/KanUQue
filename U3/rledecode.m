@@ -1,6 +1,7 @@
-function M = rledecode(M, I)
+function M = rledecode(M, I, S)
     Bn = length(I);
-    B = [];
+
+    B = ones(S, 8) * -1;
     
     e = 1;
     for i = 1:Bn
@@ -25,6 +26,6 @@ function M = rledecode(M, I)
             f = fj;
         end
         
-        B(:,i) = b_;
+        B(1:f,i) = b_(1:f);
     end
 end
