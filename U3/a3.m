@@ -2,27 +2,44 @@ clear;
 home;
 close all;
 
-img = imread('Laboruebung 1/s2201.ppm');
+filename = 'Laboruebung 1/s2202.ppm';
+format = 'integer*2';
+
+% Load Image
+img = imread(filename);
 gray = rgb2gray(img);
-
-R_ = rlencode(gray);
-
-fid = fopen('s2201.encoded', 'wb');
-for i = 1:8
-    ei = find(R_(i,:) == 0, 1);
-    if isempty(ei)
-        fwrite(fid, R_(i, :));
-    else
-        fwrite(fid, R_(i, 1:ei(1)));
-    end
+% Show Input Image
+figure('Name', 'Raw');
+imshow(gray);
+% Build encoded Filename
+start = strfind(filename, '/');
+log2(size(gray, 1)*size(gray, 2))
+if isempty(start)
+    start = 0;
 end
+encodedFilename = strcat(filename(start+1:strfind(filename, '.')-1), '.encoded');
+% RLE Encoding of Image
+R_ = rlencode(gray, encodedFilename, format);
+% Read RLE encoded File
+fid = fopen(encodedFilename, 'rb');
+dat = fread(fid, format);
 fclose(fid);
+% RLE Decoding of Image
+imgn = rledecode(dat, size(gray));
+% Show decoded Image
+figure('Name', 'Decoded');
+imshow(uint8(imgn));
+assert(isequal(gray, imgn));
 
-fid = fopen('s2201.encoded', 'rb');
-dat = fread(fid);
-fclose(fid);
+% Amount of Values in Data
+en = length(dat);
+% Amount of Bits in Image
+rn = size(R_, 1) * size(R_, 2);
+% Indices of '0' in Data
+zi = find(R_ == 0);
+% Amount of Trash in Data reduced by control zeros (2 per Bitplane)
+zn = length(zi) - size(R_, 2)*2;
+% Amount of Encoded Data
+bn = rn - zn;
 
-ind = find(dat == 0);
-
-imgn = rledecode(dat, ind, size(img, 1)*size(img, 2));
-
+kn = en / rn;
