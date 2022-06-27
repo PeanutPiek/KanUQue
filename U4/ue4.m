@@ -7,7 +7,7 @@ image = imread('s2201.ppm');
 gray = rgb2gray(image);
 
 N = 8;
-data = int32(gray);
+data = int16(gray);
 
 M = length(data) / N;
 
@@ -15,7 +15,6 @@ for j = 0:M
     d = data(j*N+1:N*(j+1),j*N+1:N*(j+1));
     
     dct = dct2D(N, d);
-    
     
 end
 

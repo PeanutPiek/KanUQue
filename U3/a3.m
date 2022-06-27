@@ -2,7 +2,7 @@ clear;
 home;
 close all;
 
-filename = 'sample.ppm';
+filename = 'Laboruebung 1/s2202.ppm';
 format = 'integer*2';
 
 % Load Image
@@ -13,6 +13,7 @@ figure('Name', 'Raw');
 imshow(gray);
 % Build encoded Filename
 start = strfind(filename, '/');
+log2(size(gray, 1)*size(gray, 2))
 if isempty(start)
     start = 0;
 end

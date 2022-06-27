@@ -30,7 +30,8 @@ function R_ = rlencode(M, filename, format)
             fwrite(fid, [R_(i, :) 0], format);
         else
             % Write dataset upto ending zero
-            fwrite(fid, R_(1:ei(1), i), format);
+            x_ = int16(R_(1:ei, i));
+            fwrite(fid, x_, format);
         end
     end
     fclose(fid);
