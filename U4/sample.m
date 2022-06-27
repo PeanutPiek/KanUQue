@@ -9,8 +9,8 @@ result = zeros(size(gray));
 quant = zeros(size(gray));
 
 N = 8;
-qf = 128;
-n = 8;
+qf = 64;
+n = 32;
 
 W = size(gray, 1) / N;
 H = size(gray, 2) / N;
@@ -30,6 +30,9 @@ for i = 1:W
         quant(((i-1)*N)+1:i*N,((j-1)*N)+1:j*N) = q;
     end
 end
+
+figure
+imshow(gray);
 
 figure
 imshow(result);
