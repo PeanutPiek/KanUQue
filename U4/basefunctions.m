@@ -78,6 +78,10 @@ for y = 1:N
         base_image((x-1)*N+1:x*N,(y-1)*N+1:y*N) = base(x, y, :, :);
     end
 end
+
+mbi = min(base_image);
+base_image = base_image + abs(mbi);
+
 figure('Name', sprintf('Basisfunktionen %dx%d', N, N));
 imshow(base_image);
 
